@@ -5,7 +5,7 @@ socket.emit('new player');
 setInterval(function() { // Updatefunction
     socket.emit('movement', movement);
 
-}, 1000 / 60);
+}, 1000 / 30);
 
 socket.on('message', function(data) {
   console.log(data);
