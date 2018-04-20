@@ -28,8 +28,8 @@ io.sockets.on('connection', function(socket) {
   socket.on('new player', function() {
     console.log(players);
     players[socket.id] = {
-      x: 300,
-      y: 300,
+      x: 50 + (600 * Math.random()),
+      y: 50 + (450 * Math.random()),
       tag: true
     };
     Object.keys(players).forEach(function(key) {
