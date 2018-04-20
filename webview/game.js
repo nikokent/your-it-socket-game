@@ -2,9 +2,11 @@
 var socket = io();
 
 socket.emit('new player');
-setInterval(function() { // Updatefunction
-    socket.emit('movement', movement);
 
+setInterval(function() { // Updatefunction
+    if(movement.left || movement.right || movement.down || movement.up){
+        socket.emit('movement', movement);
+    }
 }, 1000 / 30);
 
 socket.on('message', function(data) {

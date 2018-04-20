@@ -24,8 +24,10 @@ var timedTag = function(){
 };
 
 var players = {};
+var updateState = false;
 io.sockets.on('connection', function(socket) {
   socket.on('new player', function() {
+      updateState = true;
     console.log(players);
     players[socket.id] = {
       x: 50 + (600 * Math.random()),
@@ -39,23 +41,24 @@ io.sockets.on('connection', function(socket) {
     });
   });
   socket.on('movement', function(data) {
-    var player = players[socket.id] || {};
-    if (data.left) {
-      player.x -= 5;
-    }
-    if (data.up) {
-      player.y -= 5;
-    }
-    if (data.right) {
-      player.x += 5;
-    }
-    if (data.down) {
-      player.y += 5;
-    }
-    if(player.x < 0 || player.x > 800 || player.y < 0 || player.y > 600){
-        delete players[socket.id];
-        socket.emit("refresh");
-    }
+        updateState = true;
+        var player = players[socket.id] || {};
+        if (data.left) {
+            player.x -= 5;
+        }
+        if (data.up) {
+            player.y -= 5;
+        }
+        if (data.right) {
+            player.x += 5;
+        }
+        if (data.down) {
+            player.y += 5;
+        }
+        if(player.x < 0 || player.x > 800 || player.y < 0 || player.y > 600){
+            delete players[socket.id];
+            socket.emit("refresh");
+        }
 
     Object.keys(players).forEach(function(key) {
         if(key != socket.id && canTag == true){
@@ -90,5 +93,9 @@ io.sockets.on('connection', function(socket) {
   });
 });
 setInterval(function() {
-  io.sockets.emit('state', players);
+    if(updateState){
+        io.sockets.emit('state', players);
+        updateState = false;
+    }
+    
 }, 1000 / 30);
