@@ -59,8 +59,8 @@ io.sockets.on('connection', function(socket) {
 
     Object.keys(players).forEach(function(key) {
         if(key != socket.id && canTag == true){
-            if (player.x >= players[key].x && player.x <= players[key].x + 10){
-                if(player.y >= players[key].y && player.y <= players[key].y + 10){
+            if (player.x >= players[key].x - 2 && player.x <= players[key].x + 12){
+                if(player.y >= players[key].y - 2&& player.y <= players[key].y + 12){
                     console.log("CRASH!!!");
                     if(player.tag == true){
                         player.tag = false;
